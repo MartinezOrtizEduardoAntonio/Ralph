@@ -1,7 +1,8 @@
 import pygame 
 import Player
 import Object
-
+import ralph
+import Building
 # Initialize Pygame
 pygame.init()
 
@@ -17,14 +18,28 @@ pygame.display.set_caption("Ralph the devastating")
 Objects=[]
 
 #create the room 
-for i in range(20):
-    Objects.append(Object.Wall(screen,Objects,i*32,500))
+Building.createBuilding(Objects,screen)
+for i in range(5):
+    Objects.append(Object.Wall(screen,Objects,i*175,516))
 
-Objects.append(Object.Wall(screen,Objects,5*32,410))
-Objects.append(Object.Wall(screen,Objects,9*32,480))
+#muros que collisionan con ralph 
+Objects.append(Object.WallInvisible(screen,Objects,8*32-10,110))
+Objects.append(Object.WallInvisible(screen,Objects,16*32+10,110))
 
-player=Player.Player(screen,Objects,0,0)
+player=Player.Player(screen,Objects,0,480)
 Objects.append(player)
+
+Ralp=ralph.Ralph(screen,Objects,11*32,100)
+Objects.append(Ralp)
+
+'''
+Objects.append(Object.Wall(screen,Objects,10*32,3))
+Objects.append(Object.Wall(screen,Objects,10,3))
+
+Objects.append(Object.powerUpHelmet(screen,Objects,10,410))
+Objects.append(Object.powerUpPai(screen,Objects,30,410))
+'''
+
 # Run the game loop
 running = True
 
@@ -38,6 +53,7 @@ while running:
             pass
     keys = pygame.key.get_pressed()
     player.step(keys)
+    Ralp.step()
 
     # Fill the background color of the window
     screen.fill((0, 0, 0))  # black color
@@ -46,6 +62,7 @@ while running:
     for i in Objects:
         i.update()
 
+    player.draw_interface()
     # Update the display
     pygame.display.update()
 
